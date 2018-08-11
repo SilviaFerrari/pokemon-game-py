@@ -87,14 +87,6 @@ while run == True:
                 move = 10
             elif event.key  == pygame.K_SPACE:
                 move = -20
-            #elif event.key == pygame.K_d:
-                #def build():
-                    #lavax = 0
-                    #lavay = 0
-                    #level = [
-                        #"####################",
-                        #"                    ",
-                        #"##               ###",
                         
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:

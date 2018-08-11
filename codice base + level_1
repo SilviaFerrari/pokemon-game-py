@@ -1,0 +1,188 @@
+import pygame
+from pygame.locals import *
+pygame.init()
+pygame.font.init()
+hs = 950
+ls = 1450
+sdg = pygame.display.set_mode((ls,hs))
+pygame.display.set_caption("JumpHell")
+white = (255,255,255)
+black = (0,0,0)
+red = (255,0,0)
+blue = (0,0,255)
+deepskyblue1 = (0,191,225)
+green = (0,255,0)
+myfont = pygame.font.SysFont("Algerian", 200)
+textsurface = myfont.render("JumpHell", True, (225,0,0))
+pl = ls*0.15
+ph = hs*0.35
+def disegnatextsurface(pl,ph):
+    sdg.blit(textsurface,(pl,ph))
+myfont2 = pygame.font.SysFont("Comic Sans MS", 40)
+textsurface2 = myfont2.render("press W to start the game", False, (0,0,0))
+sl = ls*0.33
+sh = hs*0.90
+def disegnatextsurface2(sl,sh):
+    sdg.blit(textsurface2,(sl,sh))
+myfont3 = pygame.font.SysFont("Comic Sans MS", 40)
+textsurface3 = myfont3.render("press W to restart", False, (225,225,225))
+al = ls*0.38
+ah = hs*0.85
+def disegnatextsurface3(sl,sh):
+    sdg.blit(textsurface3,(sl,sh))
+B = pygame.image.load("E:\GIOCO_PYTHON\Immagini\sfondo_inferno_P3D.png")
+bl = (ls*0.8)
+bh = (hs*0.8)
+def disegnaB(bl,bh):
+    sdg.blit(B,(bl,bh))
+L = pygame.image.load("E:\GIOCO_PYTHON\Immagini\epicfail2.png")
+ll = (ls*0.275)
+lh = (hs*0.150)
+def disegnaL(ll,lh):
+    sdg.blit(L,(ll,lh))
+X = pygame.image.load("E:\GIOCO_PYTHON\Immagini\smb3.png")
+xl = (ls*0.455)
+xh = (hs*0.49)
+muovi = 0
+move = 0
+pygame.key.set_repeat(300,30)
+def disegnaX(xl,xh):
+    sdg.blit(X,(xl,xh))
+    
+M = pygame.image.load("E:\GIOCO_PYTHON\Immagini\cloud.png")
+ml = (ls*-0.30)
+mh = -300.0
+def disegnaM(ml,mh):
+    sdg.blit(M,(ml,mh))
+V = pygame.image.load("E:\GIOCO_PYTHON\Immagini\smbl.png")
+vl = (ls*0.550)
+vh = (hs*0.430)
+def disegnaV(vl,vh):
+    sdg.blit(V,(vl,vh))
+K = pygame.image.load("E:\GIOCO_PYTHON\Immagini\ostacolo_inferno_L.png")
+kl = 50
+kh = (hs*0.0)
+def disegnaK(kl,kh):
+    sdg.blit(K,(kl,kh))
+J = pygame.image.load("E:\GIOCO_PYTHON\Immagini\lava.jpg")
+jl =(ls*0.725)
+jh =(hs*0.100)
+def disegnaJ(jl,kh):
+    sdg.blit(J,(jl,jh))
+
+class Platform(pygame.sprite.Sprite):
+    def __init__(self,el,eh):
+        pygame.sprite.Sprite.__init__(self)
+        self.image=pygame.Surface((50,50))
+        self.image.load("E:\GIOCO_PYTHON\Immagini\lava.jpg")
+        self.rect=self.image.get_rect()
+        self.rect.el=el
+        self.rect.eh=eh
+        plats.add(self)
+    def update(self):
+        screen.blit(self.image, (self.rect.el, self.rect.eh))
+
+T = pygame.image.load("E:\GIOCO_PYTHON\Immagini\lava.jpg")
+el = 0.0
+eh = 0.0
+def disegnaT(el,eh):
+    sdg.blit(T,(el,eh))
+
+run = True
+while run == True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+        
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT:
+                muovi = 10
+            elif event.key == pygame.K_LEFT:
+                muovi = -10
+            elif event.key == pygame.K_UP:
+                move = -10
+            elif event.key == pygame.K_DOWN:
+                move = 10
+            elif event.key  == pygame.K_SPACE:
+                move = -20
+                        
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
+                muovi = 0
+            elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                move = 0
+            elif event.key == pygame.K_SPACE:
+                move = 10
+            
+    sdg.fill(deepskyblue1)
+    disegnaB(0,0)
+    disegnaM(ml,mh)
+    disegnatextsurface(pl,ph)
+    disegnatextsurface2(sl,sh)
+    #disegnaK(kl,kh)
+    #disegnaJ(jl,jh)
+    if xl < 0.0 or xh < 0.0 or xh > 915 or xl > 1405.0:
+        sdg.fill(black)
+        disegnaL(ll,lh)
+        disegnaV(vl,vh)
+        disegnatextsurface3(al,ah)
+    
+    xl = xl + muovi
+    xh = xh + move
+    disegnaX(xl,xh)
+    
+ #livello 1
+el = 0
+eh = 0
+level_1 = [
+    '#############################',
+    '#P           ################',
+    '#            ooooo###########',
+    '#    oooooo       oooooo#####',
+    '#    o####o             oooo#',
+    '#    oooooo  ooo            #',
+    '#            ###ooooo       #',
+    '#            ########oooo   #',
+    '############## ###########  #',
+    '#ooooooo       #o        #  #',
+    '#              #o        #  #',
+    '#        oooooo###oo  #  #  #',
+    '#  o#o#o########o###  o  #  #',
+    '#  #########  o    #  o  #  #',
+    '#  #       #       o     #  #',
+    '#  #       #    o     o  #  #',
+    '#     oo   #  o #     #  #  #',
+    '#     ##      # #  o  #     #',
+    '#############################']
+for i in level_1:
+    for c in i:
+        if c == ' ':
+            pass
+        elif c == 'o':
+            sdg.fill(black)
+            disegnaL(ll,lh)
+            disegnaV(vl,vh)
+            disegnatextsurface3(al,ah)
+        elif c == '#':
+             if xl < 0.0 or xh < 0.0 or xh > 915 or xl > 1405.0:
+                 sdg.fill(black)
+                 disegnaL(ll,lh)
+                 disegnaV(vl,vh)
+                 disegnatextsurface3(al,ah)
+             else:
+                 disegnaT(el,eh)
+             el += 50
+             eh += 50
+                
+        disegnaT(el,eh)
+    
+    
+       # for g in range(0,551):
+        #disegnaT(el,eh)
+    #print (xl)
+    #print (xh) 
+
+    pygame.display.flip()
+
+pygame.quit()
+quit()

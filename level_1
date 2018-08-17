@@ -1,0 +1,197 @@
+import pygame
+from pygame.locals import *
+pygame.init()
+pygame.font.init()
+hs = 950
+ls = 1450
+sdg = pygame.display.set_mode((ls,hs))
+pygame.display.set_caption("JumpHell")
+white = (255,255,255)
+black = (0,0,0)
+red = (255,0,0)
+blue = (0,0,255)
+deepskyblue1 = (0,191,225)
+green = (0,255,0)
+L = pygame.image.load("E:\GIOCO_PYTHON\Immagini\epicfail2.png")
+ll = (ls*0.275)
+lh = (hs*0.150)
+def disegnaL(ll,lh):
+    sdg.blit(L,(ll,lh))
+V = pygame.image.load("E:\GIOCO_PYTHON\Immagini\smbl.png")
+vl = (ls*0.550)
+vh = (hs*0.430)
+def disegnaV(vl,vh):
+    sdg.blit(V,(vl,vh))
+K_O = pygame.image.load("E:\GIOCO_PYTHON\Immagini\ostacolo_inferno.png")
+kol = 0
+koh = 0
+def disegnaK_O(kol,koh):
+    sdg.blit(K_O,(kol,koh))
+K_L = pygame.image.load("E:\GIOCO_PYTHON\Immagini\ostacolo_inferno_L.png")
+kll = 0
+klh = 0
+def disegnaK_L(kll,klh):
+    sdg.blit(K_L,(kll,klh))
+K_R = pygame.image.load("E:\GIOCO_PYTHON\Immagini\ostacolo_inferno_R.png")
+krl = 0
+krh = 0
+def disegnaK_R(krl,krh):
+    sdg.blit(K_R,(krl,krh))
+K_U = pygame.image.load("E:\GIOCO_PYTHON\Immagini\ostacolo_inferno_U.png")
+kul = 0
+kuh = 0
+def disegnaK_U(kul,kuh):
+    sdg.blit(K_U,(kul,kuh))
+X = pygame.image.load("E:\GIOCO_PYTHON\Immagini\smb3.png")
+xl = 700
+xh = 402
+muovi = 0
+move = 0
+pygame.key.set_repeat(300,30)
+def disegnaX(xl,xh):
+    sdg.blit(X,(xl,xh))
+myfont3 = pygame.font.SysFont("Comic Sans MS", 40)
+textsurface3 = myfont3.render("press W to restart", False, (225,225,225))
+al = ls*0.38
+ah = hs*0.85
+def disegnatextsurface3(sl,sh):
+    sdg.blit(textsurface3,(sl,sh))
+
+class Platform(pygame.sprite.Sprite):
+    def __init__(self,el,eh):
+        pygame.sprite.Sprite.__init__(self)
+        self.image=pygame.Surface((50,50))
+        self.image.load("E:\GIOCO_PYTHON\Immagini\lava.jpg")
+        self.rect=self.image.get_rect()
+        self.rect.el=el
+        self.rect.eh=eh
+        plats.add(self)
+    def update(self):
+        screen.blit(self.image, (self.rect.el, self.rect.eh))
+
+T = pygame.image.load("E:\GIOCO_PYTHON\Immagini\lava.jpg")
+el = 0
+eh = 0
+def disegnaT(el,eh):
+    sdg.blit(T,(el,eh))
+
+run = True
+while run == True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+        
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT:
+                muovi = 7
+            elif event.key == pygame.K_LEFT:
+                muovi = -7
+            elif event.key == pygame.K_UP:
+                move = -7
+            elif event.key == pygame.K_DOWN:
+                move = 7
+            elif event.key  == pygame.K_SPACE:
+                move = -15
+                        
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
+                muovi = 0
+            elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                move = 0
+            elif event.key == pygame.K_SPACE:
+                move = 10
+            
+    sdg.fill(deepskyblue1)
+    xl = xl + muovi
+    xh = xh + move
+
+#livello 1
+    el = 0
+    eh = 0
+    kol = 0
+    koh = 0
+    kll = 0
+    klh = 0
+    krl = 0
+    krh = 0
+    kul = 0
+    kuh = 0
+    level_1 = [
+        '#############################',
+        '#P           ################',
+        '#            uuuuu###########',
+        '#   looooor       uuuuuu#####',
+        '#   l#####r             uuuu#',
+        '#   luuuuur  ooo            #',
+        '#            ###ooooo       #',
+        '#o           # ######oooo   #',
+        '############## ###########  #',
+        '#uuuuuuu       #r        #  #',
+        '#              #r        #  #',
+        '#        oooooo###oo  o  #  #',
+        '#  o#o#o########u###  #  #  #',
+        '#  #########  u    #  u  #  #',
+        '#  #       #       u     #  #',
+        '#  #       #    o     o  #  #',
+        '#     oo   #  o #     #  #  #',
+        '#     ##      # #  o  #     #',
+        '#############################']
+    for i in level_1:
+        for c in i:
+            if c == ' ':
+                pass
+            elif c == '#':
+                disegnaT(el,eh)
+            el += 50
+        eh += 50
+        el = 0
+    for i in level_1:
+        for c in i:
+            if c == ' ' or c == '#':
+                pass
+            elif c == 'o':
+                disegnaK_O(kol,koh)
+            kol += 50
+        koh += 50
+        kol = 0
+    for i in level_1:
+        for c in i:
+            if c == ' ' or c == '#':
+                pass
+            elif c == 'l':
+                disegnaK_L(kll,klh)
+            kll += 50
+        klh += 50
+        kll = 0
+    for i in level_1:
+        for c in i:
+            if c == ' ' or c == '#':
+                pass
+            elif c == 'r':
+                disegnaK_R(krl,krh)
+            krl += 50
+        krh += 50
+        krl = 0
+    for i in level_1:
+        for c in i:
+            if c == ' ' or c == '#':
+                pass
+            elif c == 'u':
+                disegnaK_U(kul,kuh)
+            kul += 50
+        kuh += 50
+        kul = 0
+    if xl < 0.0 or xh < 0.0 or xh > 915 or xl > 1405.0:
+        sdg.fill(black)
+        disegnaL(ll,lh)
+        disegnaV(vl,vh)
+        disegnatextsurface3(al,ah)
+    else:
+        disegnaX(xl,xh)
+    #print (xl)
+    #print (xh) 
+
+    pygame.display.flip()
+
+pygame.quit()
+quit()

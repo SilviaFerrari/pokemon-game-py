@@ -1,0 +1,204 @@
+import pygame
+import time
+import random
+from pygame.locals import *
+import sys, pygame
+#window_width=ls
+#window_height=hs
+pygame.init()
+
+white = (255,255,255)
+black = (0,0,0)
+red = (255,0,0)
+blue = (0,0,255)
+green = (0,200,50)
+ls = 1333
+hs = 1000
+
+gameDisplay = pygame.display.set_mode((ls,hs))
+pygame.display.set_caption('slither')
+
+clock = pygame.time.Clock()
+FPS = 15
+blockSize = 30.0
+noPixel = 0
+
+small_font = pygame.font.SysFont("georgia", 35)
+medium_font = pygame.font.SysFont("georgia", 60)
+large_font = pygame.font.SysFont("gergia", 90)
+
+def text_object(text, color, size):
+        if size == "small":
+                screen_text = small_font.render(text, True, color)
+        elif size == "medium":
+                screen_text = medium_font.render(text, True, color)
+        elif size == "large":
+                screen_text = large_font.render(text, True, color)
+                
+        return screen_text, screen_text.get_rect()
+
+def message_to_screen(msg, color, margine_y = 0, size = "small"):
+    screen_text, text_rectangle = text_object(msg, color, size)
+    text_rectangle.center = (ls/2), (hs/2) + margine_y
+    gameDisplay.blit(screen_text, text_rectangle)
+
+p = pygame.image.load("E:\GIOCO_PYTHON\prato_gioco.png")
+pl = 0
+ph = 0
+def draw_garden(pl,ph):
+        gameDisplay.blit(p,(pl,ph))
+poke = pygame.image.load("E:\GIOCO_PYTHON\pokeball_gioco.png")
+aa = pygame.image.load("E:\GIOCO_PYTHON\lbasour.png")
+bb = pygame.image.load("E:\GIOCO_PYTHON\cane.png")
+cc = pygame.image.load("E:\GIOCO_PYTHON\cavallo.png")
+dd = pygame.image.load("E:\GIOCO_PYTHON\charisard.png")
+ee = pygame.image.load("E:\GIOCO_PYTHON\charmander.png")
+ff = pygame.image.load("E:\GIOCO_PYTHON\giphy.png")
+gg = pygame.image.load("E:\GIOCO_PYTHON\insetto.png")
+hh = pygame.image.load("E:\GIOCO_PYTHON\leone.png")
+ii = pygame.image.load("E:\GIOCO_PYTHON\lupo.png")
+jj = pygame.image.load("E:\GIOCO_PYTHON\metallo.png")
+kk = pygame.image.load("E:\GIOCO_PYTHON\pichaku.gif")
+ll = pygame.image.load("E:\GIOCO_PYTHON\pokemans_467.png")
+mm = pygame.image.load("E:\GIOCO_PYTHON\laichou.png")
+nn = pygame.image.load("E:\GIOCO_PYTHON\Squirtle.png")
+oo = pygame.image.load("E:\GIOCO_PYTHON\lalpa.png")
+pp = pygame.image.load("E:\GIOCO_PYTHON\lopo.png")
+qq = pygame.image.load("E:\GIOCO_PYTHON\lola.png")
+rr = pygame.image.load("E:\GIOCO_PYTHON\lolatile.png")
+ss = pygame.image.load("E:\GIOCO_PYTHON\lolpe.png")
+ball = [aa,bb,cc,dd,ee,ff,gg,hh,ii,jj,kk,ll,mm,oo,pp,qq,rr,ss,]
+       
+def snake(blockSize, snakelist):
+        for size in snakelist:
+                pygame.draw.rect(gameDisplay, green,[size[0],size[1],blockSize,blockSize])
+                gameDisplay.blit(poke,(snakelist[-1][0], snakelist[-1][1]))
+
+
+
+"""def game_intro():
+        for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                        pygame.quit()
+                        quit()
+                if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_g:
+                                intro = False
+        intro = True
+        while intro:
+                gameDisplay.fill(blue)
+                message_to_screen("NOME GIOCO", red)
+                message_to_screen("Cattura più pokemon che puoi!", red)
+                message_to_screen("ATTENZIONE: non si faranno sempre catturare al primo colpo.", red)
+                message_to_screen("Premi G per giocare", red)
+                pygame.display.update()
+                clock.tick(FPS)"""
+                
+                
+    
+def game_loop():
+    gameExit = False
+    gameOver = False
+
+    lead_x = ls/2
+    lead_y = hs/2
+
+    change_pixels_of_x = 0
+    change_pixels_of_y = 0
+
+    snakelist = []
+    snakeLength = 1
+
+    randomAppleX = round(random.randrange(0, ls-blockSize)/30.0)*30.0
+    randomAppleY = round(random.randrange(0, hs-blockSize)/30.0)*30.0
+    
+    while not gameExit:
+        
+        while gameOver == True:
+            gameDisplay.fill(white)
+            message_to_screen("Game over, press c to play again or Q to quit", red)
+            pygame.display.update()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    gameOver = False
+                    gameExit = True
+                    
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_q:
+                        gameExit = True
+                        gameOver = False
+                    if event.key == pygame.K_c:
+                        game_loop()
+            
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                gameExit = True
+
+            if event.type == pygame.KEYDOWN:
+
+                leftArrow = event.key == pygame.K_LEFT
+                rightArrow = event.key == pygame.K_RIGHT
+                upArrow = event.key == pygame.K_UP
+                downArrow = event.key == pygame.K_DOWN
+                
+                if leftArrow:
+                    change_pixels_of_x = -blockSize
+                    change_pixels_of_y = noPixel
+                elif rightArrow:
+                    change_pixels_of_x = blockSize
+                    change_pixels_of_y = noPixel
+                elif upArrow:
+                    change_pixels_of_y = -blockSize
+                    change_pixels_of_x = noPixel
+                elif downArrow:
+                    change_pixels_of_y = blockSize
+                    change_pixels_of_x = noPixel
+
+        if lead_x >= ls or lead_x < 0 or lead_y >= hs or lead_y < 0:
+                gameOver = True
+                   
+        lead_x += change_pixels_of_x
+        lead_y += change_pixels_of_y
+        
+        gameDisplay.fill(white)
+        draw_garden(pl,ph)
+        AppleThickness = 30.0
+        
+        #pygame.draw.rect(gameDisplay, red, [randomAppleX,randomAppleY,AppleThickness,AppleThickness])
+        #for i in range(0,100):
+        #d = random.randint(0,2)
+        gameDisplay.blit(ball[0],(randomAppleX, randomAppleY))
+        #d = random.randint(0,2)
+        
+        snakehead = []
+        snakehead.append(lead_x)
+        snakehead.append(lead_y)
+        snakelist.append(snakehead)
+
+        if len(snakelist) > snakeLength:
+            del snakelist[0]
+            
+        for eachSegment in snakelist [:-1]:
+            if eachSegment == snakehead:
+                gameOver = True
+                
+        snake(blockSize, snakelist)
+        
+        pygame.display.update()
+        
+        if lead_x >= randomAppleX and lead_x <= randomAppleX + AppleThickness: 
+            if lead_y >= randomAppleY and lead_y <= randomAppleY + AppleThickness:
+                d = random.randint(0,19)
+                ball[0] = ball[d]
+                gameDisplay.blit(ball[d],(randomAppleX,randomAppleY))       
+                randomAppleX = round(random.randrange(0, ls-blockSize)/30.0)*30.0
+                randomAppleY = round(random.randrange(0, hs-blockSize)/30.0)*30.0
+                snakeLength += 1
+             
+        clock.tick(FPS)
+
+    pygame.quit()
+    quit()
+#game_intro()
+game_loop()

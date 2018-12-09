@@ -20,9 +20,9 @@ pygame.display.set_caption("POKEMON")
 clock = pygame.time.Clock()
 FPS = 15
 blockSize = 25.0
+px = 70
 noPixel = 0
 pokemon = []
-score = 0
 scena = "none" 
 
 smallfont = pygame.font.SysFont("Arial",30)
@@ -69,7 +69,7 @@ def game_intro():
         draw_image(pikachu,450,240)
         drawtext(title,200,40)
         drawtext(textuse,200,150)
-        drawtext(textmenu,165,575)
+        drawtext(textmenu,225,575)
         pygame.display.update()
         clock.tick(FPS)
                 
@@ -120,7 +120,8 @@ textuse3 = mediumfont.render("Premi R per giocare di nuovo", False, (0,0,0))
 textexit = mediumfont.render("Premi E per uscire dal gioco", False, (0,0,0))        
 def game_loop():
     score = 0
-    Score = ("0")
+    str_score = str(score)
+    
     pygame.mixer.music.load("Anville_Town.mp3")
     pygame.mixer.music.play(-1)
     gameExit = False
@@ -135,18 +136,21 @@ def game_loop():
     ball_list = []
     ballLength = 1
 
-    randomPokeX = round(random.randrange(0, 1200-blockSize)/50.0)*50.0
-    randomPokeY = round(random.randrange(60, 930-blockSize)/50.0)*50.0
+    randomPokeX = round(random.randrange(0, 1200-px))
+    randomPokeY = round(random.randrange(46, 690-px))
     
     while not gameExit:
         
         while gameOver == True:
+            textscore = mediumfont.render("Hai catturato " + str_score + " pokemon", False, (225,0,0))
+            
             sdg.fill(white)
             draw_image(menu,0,0)
             drawtext(textover,250,50)
-            drawtext(textuse3,250,475)
-            drawtext(textexit,270,575)
-            draw_image(poke_open,500,250)
+            draw_image(poke_open,190,250)
+            drawtext(textscore,415,310)
+            drawtext(textuse3,250,510)
+            drawtext(textexit,270,580)
             pygame.display.update()
 
             for event in pygame.event.get():
@@ -185,7 +189,7 @@ def game_loop():
                     change_pixels_of_y = blockSize
                     change_pixels_of_x = noPixel
 
-        if lead_x >= ls or lead_x < 0 or lead_y >= hs or lead_y < 60:
+        if lead_x >= (ls-blockSize) or lead_x < 0 or lead_y >= (hs-blockSize) or lead_y < 46:
                 gameOver = True
                    
         lead_x += change_pixels_of_x
@@ -200,7 +204,7 @@ def game_loop():
             draw_image(oceano,0,0)
         
         draw_image(barra,0,0)
-        textscore = smallfont.render("POKEMON CATTURATI: " + Score, False, (0,200,50))
+        textscore = smallfont.render("POKEMON CATTURATI: " + str_score, False, (0,200,50))
         drawtext(textscore,60,5)
         if score == 10:
             drawtext(texten,665,10)
@@ -232,11 +236,12 @@ def game_loop():
         if lead_x >= randomPokeX and lead_x <= randomPokeX + PokeThickness: 
             if lead_y >= randomPokeY and lead_y <= randomPokeY + PokeThickness:
                 
-                randomPokeX = round(random.randrange(70, 1200-blockSize)/50.0)*50.0
-                randomPokeY = round(random.randrange(70, 650-blockSize)/50.0)*50.0
+                randomPokeX = round(random.randrange(0, 1200-px))
+                randomPokeY = round(random.randrange(46, 690-px))
                 ballLength += 1
                 score += 1
-                Score = str(score)
+                str_score = str(score)
+                                
                 if scena == "terra":
                     d = random.randint(0,14)
                     pokemon[0] = pokemon[d]
@@ -249,8 +254,8 @@ def game_loop():
                     d = random.randint(30,44)
                     pokemon[0] = pokemon[d]
                     sdg.blit(pokemon[d],(randomPokeX,randomPokeY))
-    
-        #print(score)     
+        
+        #print(score)
         clock.tick(FPS)
 
     pygame.quit()
@@ -258,3 +263,4 @@ def game_loop():
 game_intro()
 game_menu()
 game_loop()
+

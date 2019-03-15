@@ -10,17 +10,40 @@ clock=pygame.time.Clock()
 white = (225,225,225)
 red = (225,0,0)
 black = (0,0,0)
+silver = (192,192,192)
 """Creiamo i 2 principali gruppi di sprites: le sprites da disegnare in generale
 e le piattaforme, in un gruppo separato per poter usare le funzioni di collisione"""
 todraw=pygame.sprite.Group()
 plats=pygame.sprite.Group()
-#Classe per la creazione delle piattaforme
+
+#Funzione per creare vari tipi di testo e immagini
+smallfont = pygame.font.SysFont("Arial",30)
+mediumfont = pygame.font.SysFont("Agency FB",50)
+largefont = pygame.font.SysFont("Agency FB",130)
+
+def drawtext(name,text_x,text_y):
+    screen.blit(name,(text_x,text_y))
+
+title = largefont.render("SKY HOP", False, (0,255,225))
+space = mediumfont.render("Press space to jump", False, black)
+arrows = mediumfont.render("Use the arrows to go right or left", False, black)
+start = mediumfont.render("Press S to start", False, black)
+
+def drawimage(image,x,y):
+    screen.blit(image,(x,y))
+    
+#Importo delle immagini
+sfondo = pygame.image.load("asdf.png")
 giocatore = pygame.image.load("E:\GIOCO_PYTHON\Immagini\smb3.png")
-terreno = pygame.image.load("E:\GIOCO_PYTHON\Immagini\lava.jpg")
+terreno = pygame.image.load("E:\GIOCO_PYTHON\Immagini\ipologie_terreno2.jpg")
 ostacolo = pygame.image.load("E:\GIOCO_PYTHON\Immagini\ostacolo_inferno.png")
 ostacolo_l = pygame.image.load("E:\GIOCO_PYTHON\Immagini\ostacolo_inferno_L.png")
 ostacolo_r = pygame.image.load("E:\GIOCO_PYTHON\Immagini\ostacolo_inferno_R.png")
 ostacolo_u = pygame.image.load("E:\GIOCO_PYTHON\Immagini\ostacolo_inferno_U.png")
+goal_inf = pygame.image.load("E:\GIOCO_PYTHON\Immagini\perg.png")
+gameover = pygame.image.load("E:\GIOCO_PYTHON\Immagini\smbl.png")
+
+#Classe per la creazione delle piattaforme
 class Platform(pygame.sprite.Sprite):
     def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)
@@ -30,6 +53,8 @@ class Platform(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         plats.add(self)
+        global lose
+        lose = "ok"
     def update(self):
         screen.blit(self.image, (self.rect.x, self.rect.y))
 
@@ -42,9 +67,25 @@ class Obstacle(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         plats.add(self)
+        global lose
+        lose = "notok"
     def update(self):
         screen.blit(self.image, (self.rect.x, self.rect.y))
 
+class Goal(pygame.sprite.Sprite):
+    def __init__(self,x,y,image):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = image
+        self.image.set_colorkey(black)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        plats.add(self)
+        global lose
+        lose = "ok"
+    def update(self):
+        screen.blit(self.image, (self.rect.x, self.rect.y))
+        
 class Player(pygame.sprite.Sprite):
     move_x = 0
     move_y = 0
@@ -65,15 +106,18 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.move_y
         ycoll()
         screen.blit(self.image,(self.rect.x, self.rect.y))
-""" Le collisioni vengono calcolate separatamente sull'asse x ed y
+    
+"""Le collisioni vengono calcolate separatamente sull'asse x ed y
 altrimenti il nostro personaggio sembrerà teletrasportarsi"""
 def xcoll():
-    collision=pygame.sprite.spritecollide(player, plats, False)
+    collision = pygame.sprite.spritecollide(player, plats, False)
     for block in collision:
-        if player.move_x>0:
-            player.rect.right=block.rect.left
-        if player.move_x<0:
-            player.rect.left=block.rect.right
+        if player.move_x > 0:
+            player.rect.right = block.rect.left
+        if player.move_x < 0:
+            player.rect.left = block.rect.right
+    if lose == "notok":
+        gameOver = True
 def ycoll():
         collision=pygame.sprite.spritecollide(player, plats, False)
         player.onground=False
@@ -82,66 +126,50 @@ def ycoll():
                 player.onground=True
             if player.move_y<0:
                 player.rect.top=block.rect.bottom
-                player.move_y=0     #serve per evitare l'impressione che il giocatore si "appiccichi" al soffitto
+                player.move_y=0                         #serve per evitare l'impressione che il giocatore si "appiccichi" al soffitto
                 player.onground=False
             if player.move_y>0:
                 player.rect.bottom=block.rect.top
                 player.onground=True
+        if lose == "notok":
+            gameOver = True
 
 
-"""*def game_intro():
+def game_intro():
     intro = True
     while intro:
         #pygame.mixer.music.load("E:\GIOCO_PYTHON\pikachu.mp3")
         #pygame.mixer.music.play(0)
-        sdg.fill(white)
-        draw_image(menu,0,0)
-        draw_image(pikachu,450,240)
-        drawtext(title,200,40)
-        drawtext(textuse,200,150)
-        drawtext(textmenu,225,575)
+        screen.fill(silver)
+        drawimage(sfondo,300,0)
+        drawtext(title,530,300)
+        drawtext(space,550,600)
+        drawtext(arrows,470,660)
+        drawtext(start,600,800)
         pygame.display.update()
-        clock.tick(FPS)
+        clock.tick(30)
                 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_m:
+                if event.key == pygame.K_s:
                     intro = False
 
+"""def game_options():
+    options = True
+    while options:
+        screen.fill(silver)
+        drawtext(option)
 
-while not gameExit:
-        
-        while gameOver == True:
-            textscore = mediumfont.render("Hai catturato " + str_score + " pokemon", False, (225,0,0))
-            
-            sdg.fill(white)
-            draw_image(menu,0,0)
-            drawtext(textover,250,50)
-            draw_image(poke_open,190,250)
-            drawtext(textscore,415,310)
-            drawtext(textuse3,250,510)
-            drawtext(textexit,270,580)
-            pygame.display.update()
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    gameOver = False
-                    gameExit = True
-                    
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_e:
-                        gameExit = True
-                        gameOver = False
-                    if event.key == pygame.K_r:
-                        game_loop()
-                
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                gameExit = True*"""
-                    
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygameK_s:
+                    options = False"""
 
 
 
@@ -154,6 +182,8 @@ platform = []
 def build():
     px = 0
     py = 0
+    gx = 0
+    gy = 0
     myx = 0
     myy = 0
     obx = 0
@@ -171,15 +201,15 @@ def build():
             '#   l#####r             uuuu#',
             '#    uuuu#r                 #',
             '#        #######oooooo      #',
-            '#o       #     #######      #',
+            '#o      x#     #######      #',
             '########### ####### ######  #',
-            '#uuuuuuu       #r        #  #',
+            '#uuuuuuu       #r       u#  #',
             '#              #r        #  #',
             '#          o   ###oo  o  #  #',
             '#  # # # #######u###  #  #  #',
-            '#  #########  u    #     #  #',
-            '#  #       #       u     #  #',
-            '#  #       #             #  #',
+            '#  #########  u    #  #  #  #',
+            '#  #       #       u  #  #  #',
+            '#  #       #          #  #  #',
             '#     oo   #    #     #  #  #',
             '#     ##      #o#  o  #     #',
             '#############################']
@@ -216,43 +246,70 @@ def build():
             rbx += 50
         rby += 50
         rbx = 0
-        """for c in i:
-             if c == 'X':
-                 Player(px,py)
-             px += 50
-        py += 50
-        px = 0"""
+        for c in i:
+             if c == 'x':
+                 Goal(gx,gy,goal_inf)
+             gx += 50
+        gy += 50
+        gx = 0
+        
                 
 def gravity():
     if not player.onground:
         player.move_y+=0.8
+        
 player = Player()
 build()
 
-while True:
-    screen.fill((0,0,0))
-    gravity()
-   
-    for event in pygame.event.get():
-        if event.type == QUIT:  
-            pygame.quit()
-            quit()
-        if event.type == KEYDOWN:
-            if event.key == K_SPACE:   
-                player.move_y =- 10
-            if event.key == K_LEFT: 
-                player.move_x =- 10
-            if event.key == K_RIGHT:   
-                player.move_x = 10
-        if event.type == KEYUP:  
-            if event.key == K_LEFT:
-                player.move_x = 0
-            if event.key == K_RIGHT:
-                player.move_x = 0
-    
-    todraw.update()
-    plats.update()
-    pygame.display.update()
-    clock.tick(30)
+def game_loop():
+    while True:
+        gameExit = False
+        gameOver = False
+        screen.fill((0,0,0))
+        gravity()
+
+        while not gameExit:
+        
+            while gameOver == True:
+                sdg.fill(black)
+                drawimage(gameover,500,500)
+                pygame.display.update()
+
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        gameOver = False
+                        gameExit = True
+                        pygame.quit()
+                        quit()
+                        
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_r:
+                            game_loop()
+                
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+           
+            if event.type == KEYDOWN:
+                if event.key == K_SPACE:   
+                    player.move_y =- 10
+                if event.key == K_LEFT: 
+                    player.move_x =- 10
+                if event.key == K_RIGHT:   
+                    player.move_x = 10
+            if event.type == KEYUP:  
+                if event.key == K_LEFT:
+                    player.move_x = 0
+                if event.key == K_RIGHT:
+                    player.move_x = 0
+        
+        todraw.update()
+        plats.update()
+        pygame.display.update()
+        clock.tick(30)
+game_intro()
+game_loop()
 pygame.quit()
 quit()
+

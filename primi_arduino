@@ -1,0 +1,36 @@
+/*si usa l'entrata digitale D13 solitamente
+per adesso gli unici due tipi di segnale che possiamo utilizzare sono high o low*/
+void setup(){
+  pinMode(13, OUTPUT); //inizializzo il pin D13 in output
+  //pinMode(numero del pin, modalità I/O)
+}
+
+void loop(){ //qui gli viene detto cosa deve fare
+  digitalWrite(13, HIGH); //invio un segnale sul pin
+  delay(1000); //vuol dire aspetta 1000 milli s che equivalgono a 1 s
+  digitalWrite(13, LOW);
+  delay(1000);
+}
+
+/*#define LED 13    //Define 13 pin for LED
+bool state = LOW; //The initial state of the function is defined as a low level
+char getstr;      //Defines a function that receives the Bluetooth character
+
+void setup() {
+  pinMode(LED, OUTPUT);
+  Serial.begin(9600);
+}
+
+//Control LED sub function
+void stateChange() {
+  state = !state; 
+  digitalWrite(LED, state);  
+}
+
+void loop() {
+  //The Bluetooth serial port to receive the data in the function
+  getstr = Serial.read();
+  if(getstr == 'a'){
+    stateChange();
+  }
+}*/

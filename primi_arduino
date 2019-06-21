@@ -34,3 +34,32 @@ void loop() {
     stateChange();
   }
 }*/
+
+
+
+/*ESERCIZIO: far lampeggiare la lampadine in modo che in codice morse dica la parola sos*/
+void setup(){
+  pinMode(13, OUTPUT); 
+}
+
+void loop(){
+  int i = 0;  
+  for (i = 0; i < 3; i++){
+    digitalWrite(13, HIGH);
+    delay(500); 
+    digitalWrite(13, LOW);
+    delay(700);
+  }
+  for (i = 0; i < 3; i++){
+    digitalWrite(13, HIGH); 
+    delay(1000); 
+    digitalWrite(13, LOW);
+    delay(700);
+  }
+  for (i = 0; i < 3; i++){
+    digitalWrite(13, HIGH); 
+    delay(500); 
+    digitalWrite(13, LOW);
+    delay(700);
+  } 
+}

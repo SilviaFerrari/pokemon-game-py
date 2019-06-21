@@ -63,3 +63,21 @@ void loop(){
     delay(700);
   } 
 }
+
+
+
+Codice da spedire alla mail andrea.avanzini.66@gmail.com
+/*for (i = 0; i < 9; i++){
+    if (i < 3 || 5 < i < 9){
+      digitalWrite(13, HIGH);
+      delay(500); 
+      digitalWrite(13, LOW);
+      delay(700);
+      }
+    else{
+      digitalWrite(13, HIGH);
+      delay(1500); 
+      digitalWrite(13, LOW);
+      delay(700);
+      }
+    }*/

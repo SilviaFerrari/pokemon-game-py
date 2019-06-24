@@ -154,3 +154,42 @@ Codice da spedire alla mail andrea.avanzini.66@gmail.com
       delay(700);
       }
     }*/
+    
+    
+    
+    
+/*ESERCIZIO: semaforo con esempio di porta seriale
+monitor seiale : serve per inserire e leggere i dati
+barra in alto è per l'input
+porta seriale : canale di comunicazione con l'aarduino, in questo caso il computer che comunica con il microprocessore
+il seriale in particolare sarebbe il cavo che collega l'arduino con il computer
+lo si vede cliccando la lente in alto a destra*/
+const int B = 7;
+int puls = 0;
+ 
+void setup(){
+  //ogni quanto scrive i valori o le stringhe passate
+  Serial.begin(9600);
+  pinMode(12, OUTPUT); 
+  pinMode(8, OUTPUT);
+  pinMode(4, OUTPUT);
+  pinMode(3, OUTPUT);
+  pinMode(10, OUTPUT);
+  pinMode(6, OUTPUT);
+  pinMode(B, INPUT);
+}
+
+void loop(){
+  puls = digitalRead(B);
+  //stampo sulla seriale il valore del bottone
+  Serial.println(puls);
+  int ledON = random(2,5);
+  if(puls == 1){
+    digitalWrite(12, HIGH);
+    digitalWrite(3, HIGH);
+    Serial.println("Ora i pedoni possono passare");
+    delay(10000); 
+    digitalWrite(12, LOW);
+    digitalWrite(3, LOW);
+    delay(100);
+    }

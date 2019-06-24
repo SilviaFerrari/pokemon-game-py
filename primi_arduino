@@ -193,3 +193,48 @@ void loop(){
     digitalWrite(3, LOW);
     delay(100);
     }
+
+
+
+
+/*ESERCIZIO: far accendere i led in modo asincrono*/
+int verde = 0;
+int giallo = 0;
+int rosso = 0;
+char words = 0;
+void setup(){
+  Serial.begin(9600);
+  Serial.println("Scrivi S per lo status dei led o accendine uno con queste istruzioni: G - Y - R");
+  pinMode(12, OUTPUT); 
+  pinMode(8, OUTPUT);
+  pinMode(4, OUTPUT);
+}
+
+void loop(){
+  
+  words = Serial.read();      
+    switch(words){
+      case 'G': 
+        digitalWrite(4, HIGH); 
+        Serial.println("Acceso il led verde del semaforo delle macchine"); 
+        verde = 1; 
+        break; 
+      case 'Y': 
+        digitalWrite(8, HIGH); 
+        Serial.println("Acceso il led giallo del semaforo delle macchine"); 
+        giallo = 1; 
+        break;
+      case 'R': 
+        digitalWrite(12, HIGH); 
+        Serial.println("Acceso il led rosso del semaforo dele macchine"); 
+        rosso = 1; 
+        break; 
+      case 'S': 
+        Serial.println(verde);
+        Serial.println(giallo);
+        Serial.println(rosso);
+        
+        break; 
+      default: Serial.println("Coordinate led non valide, riprovare");
+      }
+  }

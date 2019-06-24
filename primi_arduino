@@ -66,6 +66,79 @@ void loop(){
 
 
 
+/*ESERCIZIO: semaforo dei pedoni
+#define LED 13;
+monitor seiale : rve per inserire e leggere i dati*/
+const int B = 7;
+int puls = 0;
+ 
+void setup(){
+  pinMode(12, OUTPUT); 
+  pinMode(8, OUTPUT);
+  pinMode(4, OUTPUT);
+  pinMode(3, OUTPUT);
+  pinMode(10, OUTPUT);
+  pinMode(6, OUTPUT);
+  pinMode(B, INPUT);
+}
+
+void loop(){
+  puls = digitalRead(B);
+  int ledON = random(2,5);
+  if(puls == 1){
+    digitalWrite(12, HIGH);
+    digitalWrite(3, HIGH);
+    delay(10000); 
+    digitalWrite(12, LOW);
+    digitalWrite(3, LOW);
+    delay(100);
+    }
+  else if(ledON == 2){
+    digitalWrite(12, HIGH);
+    digitalWrite(3, HIGH);
+    delay(1000); 
+    digitalWrite(12, LOW);
+    digitalWrite(3, LOW);
+    delay(100);
+    }
+  else if(ledON == 3){
+    digitalWrite(8, HIGH);
+    digitalWrite(6, HIGH);
+    delay(1000);
+    digitalWrite(8, LOW);
+    digitalWrite(6, LOW);
+    delay(100);
+    }
+   else if(ledON == 4){
+    digitalWrite(4, HIGH);
+    digitalWrite(10, HIGH);
+    delay(1000);
+    digitalWrite(4, LOW);
+    digitalWrite(10, LOW);
+    delay(100);
+    }
+    /*digitalWrite(12, HIGH);
+    digitalWrite(3, HIGH);
+    delay(1000); 
+    digitalWrite(12, LOW);
+    digitalWrite(3, LOW);
+    delay(700);
+    digitalWrite(8, HIGH);
+    digitalWrite(6, HIGH);
+    delay(1000);
+    digitalWrite(8, LOW);
+    digitalWrite(6, LOW);
+    delay(700);
+    digitalWrite(4, HIGH);
+    digitalWrite(10, HIGH);
+    delay(1000);
+    digitalWrite(4, LOW);
+    digitalWrite(10, LOW);
+    delay(700);*/
+  }
+
+
+
 Codice da spedire alla mail andrea.avanzini.66@gmail.com
 /*for (i = 0; i < 9; i++){
     if (i < 3 || 5 < i < 9){
